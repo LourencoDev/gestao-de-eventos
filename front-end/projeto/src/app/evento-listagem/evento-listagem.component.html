@@ -1,0 +1,9 @@
+<div *ngFor="let evento of eventos; index as i" style="margin-left: 50px;">
+    <h3>Evento {{i+1}}</h3>
+    <li>Nome: {{evento.nome}}</li>
+    <li>Data do Evento: {{evento.data}}</li>
+    <li>Hora do Evento: {{evento.hora}}</li>
+    <li>Id do Organizador: {{evento.organizadorId}}</li>
+    <li>Hora de Criação: {{evento.createdAt}}</li>
+    <br><br>
+</div>
