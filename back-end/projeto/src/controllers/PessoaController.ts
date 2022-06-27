@@ -7,18 +7,12 @@ class PessoaController{
     public async cadastrar(req: Request, res: Response): Promise<Response> {
         const { nome, email, senha, confirmacaoSenha } = req.body;
         
-        if(senha == confirmacaoSenha){
-            await Pessoa.findOne({ 
-                email: email
-            }).then(async (pessoa) => {
-                if(pessoa)
+        if (senha == confirmacaoSenha){
+            await Pessoa.findOne({ email }).then(async (pessoa) => {
+                if (pessoa)
                     return res.status(500).json({ mensagem: "Já existe uma Pessoa cadastrada com esse email!" });
                 
-                let pessoaCadastrada = await Pessoa.create({
-                    nome: nome,
-                    email: email,
-                    senha: senha
-                });
+                const pessoaCadastrada = await Pessoa.create({ nome, email, senha });
                 
                 const response = {
                     _id: pessoaCadastrada._id,
@@ -38,13 +32,11 @@ class PessoaController{
     public async login(req: Request, res: Response): Promise<Response> {
         const { email, senha } = req.body;
         
-        await Pessoa.findOne({ 
-            email: email 
-        }).then(async (pessoa) => {
-            if(pessoa){
+        await Pessoa.findOne({ email }).then(async (pessoa) => {
+            if (pessoa){
                 const resultado = await bcrypt.compare(senha, pessoa.senha);
                 
-                if(resultado){
+                if (resultado) {
                     const token = jwt.sign({
                         _id: pessoa._id,
                         nome: pessoa.nome,
@@ -60,7 +52,7 @@ class PessoaController{
             else
                 return res.status(401).json({ mensagem: "Não existe nenhuma Pessoa cadastrada com esse email!" });
         }).catch((error) => {
-            return res.status(500).json({ error: error });
+            return res.status(500).json({ error });
         });
         return res.status(401).json({ });
     } 
